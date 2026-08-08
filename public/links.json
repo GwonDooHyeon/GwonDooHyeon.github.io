@@ -1,0 +1,19 @@
+{
+  "friends": [
+    {
+      "id_name": "common-links",
+      "desc": "Common links",
+      "link_list": []
+    },
+    {
+      "id_name": "bad-status-links",
+      "desc": "Links with bad status",
+      "link_list": []
+    },
+    {
+      "id_name": "special-links",
+      "desc": "Special links",
+      "link_list": []
+    }
+  ]
+}

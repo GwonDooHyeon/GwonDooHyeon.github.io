@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
+import config from '@/site-config'
+
+interface Props {
+  posts: CollectionEntry<'blog'>[]
+  class?: string
+}
+
+const { posts, class: className } = Astro.props
+
+// 태그별 글 개수
+const tagCount = new Map<string, number>()
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    tagCount.set(tag, (tagCount.get(tag) ?? 0) + 1)
+  }
+}
+const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12)
+
+// 연도별 글 개수
+const yearCount = new Map<number, number>()
+for (const post of posts) {
+  const year = (post.data.updatedDate ?? post.data.publishDate).getFullYear()
+  yearCount.set(year, (yearCount.get(year) ?? 0) + 1)
+}
+const years = [...yearCount.entries()].sort((a, b) => b[0] - a[0])
+
+const imagePath = config.logo.src
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/*.{jpeg,jpg,png,gif,avif,webp}'
+)
+---
+
+<aside class:list={['flex flex-col gap-4', className]}>
+  {/* 프로필 카드 */}
+  <div class='flex flex-col items-center gap-y-3 rounded-2xl border bg-background p-5'>
+    {
+      images[imagePath] && (
+        <Image
+          src={images[imagePath]()}
+          alt={config.logo.alt || 'Profile'}
+          class='size-20 rounded-full border p-1'
+          loading='eager'
+        />
+      )
+    }
+    <div class='text-center'>
+      <p class='font-medium'>{config.author}</p>
+      <p class='mt-1 text-sm text-muted-foreground'>{config.description}</p>
+    </div>
+    <a
+      href='/about'
+      class='mt-1 w-full rounded-lg border px-3 py-1.5 text-center text-sm transition-colors hover:bg-muted hover:text-primary'
+    >
+      About
+    </a>
+  </div>
+
+  {/* 태그 */}
+  {
+    tags.length > 0 && (
+      <div class='rounded-2xl border bg-background p-5'>
+        <p class='mb-3 border-s-3 border-primary ps-2 font-medium'>Tags</p>
+        <div class='flex flex-wrap gap-2'>
+          {tags.map(([tag, count]) => (
+            <a
+              href={`/tags/${tag}`}
+              class='rounded-lg bg-muted px-2 py-1 text-sm text-muted-foreground transition-colors hover:text-primary'
+            >
+              {tag}
+              <span class='ms-1 text-xs opacity-60'>{count}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  {/* 아카이브 */}
+  {
+    years.length > 0 && (
+      <div class='rounded-2xl border bg-background p-5'>
+        <p class='mb-3 border-s-3 border-primary ps-2 font-medium'>Archives</p>
+        <ul class='flex flex-col gap-y-1'>
+          {years.map(([year, count]) => (
+            <li>
+              <a
+                href='/archives'
+                class='flex items-center justify-between rounded-lg px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-primary'
+              >
+                <span>{year}</span>
+                <span class='text-xs opacity-60'>{count}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+</aside>

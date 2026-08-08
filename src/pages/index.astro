@@ -1,0 +1,59 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { PostPreview } from 'astro-pure/components/pages'
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { Button } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import HomeSidebar from '@/components/home/HomeSidebar.astro'
+import config from '@/site-config'
+
+const MAX_POSTS = 8
+// getBlogCollection 의 반환 타입은 blog | docs 유니온이라 blog 로 좁혀준다
+const allPosts = (await getBlogCollection()) as CollectionEntry<'blog'>[]
+const allPostsByDate = sortMDByDate(allPosts) as CollectionEntry<'blog'>[]
+const recentPosts = allPostsByDate.slice(0, MAX_POSTS)
+---
+
+<PageLayout meta={{ title: 'Home' }}>
+  <main class='w-full'>
+    {/* 배너 */}
+    <section id='content-header' class='animate'>
+      <div class='home-banner relative overflow-hidden rounded-2xl border'>
+        <div class='relative flex flex-col justify-end gap-y-2 px-6 py-10 sm:px-10 sm:py-16'>
+          <h1 class='text-3xl font-bold sm:text-4xl'>{config.title}</h1>
+          <p class='text-muted-foreground sm:text-lg'>{config.description}</p>
+        </div>
+      </div>
+    </section>
+
+    {/* 사이드바 + 글 목록 */}
+    <div id='content' class='animate mt-8 flex flex-col gap-6 md:flex-row-reverse md:items-start'>
+      <HomeSidebar posts={allPostsByDate} class='md:sticky md:top-6 md:w-64 md:shrink-0' />
+
+      <section class='flex min-w-0 flex-1 flex-col gap-y-4' aria-label='Recent posts'>
+        {allPosts.length === 0 && <p class='text-muted-foreground'>아직 글이 없습니다.</p>}
+
+        <ul class='flex flex-col gap-y-3'>
+          {recentPosts.map((p) => <PostPreview post={p} detailed />)}
+        </ul>
+
+        {
+          allPostsByDate.length > MAX_POSTS && (
+            <Button title='More posts' class='w-fit self-end' href='/blog' variant='ahead' />
+          )
+        }
+      </section>
+    </div>
+  </main>
+</PageLayout>
+
+<style>
+  /* 배너 — 이미지가 준비되면 background-image 로 교체하면 된다 */
+  .home-banner {
+    background-image:
+      radial-gradient(at 15% 20%, hsl(var(--primary) / 0.28) 0px, transparent 55%),
+      radial-gradient(at 85% 10%, hsl(210 90% 60% / 0.22) 0px, transparent 50%),
+      radial-gradient(at 70% 90%, hsl(280 70% 60% / 0.18) 0px, transparent 55%);
+    background-color: hsl(var(--muted));
+  }
+</style>

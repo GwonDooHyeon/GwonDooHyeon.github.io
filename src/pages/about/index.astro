@@ -1,0 +1,29 @@
+---
+import PageLayout from '@/layouts/CommonPage.astro'
+
+const headings = [
+  { depth: 2, slug: 'what-i-do', text: '하는 일' },
+  { depth: 2, slug: 'interests', text: '관심사' },
+  { depth: 2, slug: 'contact', text: '연락' }
+]
+---
+
+<PageLayout title='About' {headings}>
+  <p>백엔드와 AI 에이전트를 만듭니다.</p>
+
+  <h2 id='what-i-do'>하는 일</h2>
+  <p>여기에 소개를 적으세요.</p>
+
+  <h2 id='interests'>관심사</h2>
+  <ul>
+    <li>LLM 에이전트</li>
+    <li>백엔드 아키텍처</li>
+  </ul>
+
+  <h2 id='contact'>연락</h2>
+  <ul>
+    <li>
+      GitHub — <a href='https://github.com/GwonDooHyeon' target='_blank'>GwonDooHyeon</a>
+    </li>
+  </ul>
+</PageLayout>

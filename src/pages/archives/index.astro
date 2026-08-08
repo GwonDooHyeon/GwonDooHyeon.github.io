@@ -1,0 +1,227 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { getBlogCollection, groupCollectionsByYear, sortMDByDate } from 'astro-pure/server'
+import { Button } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+
+export const prerender = true
+
+// getBlogCollection 의 반환 타입은 blog | docs 유니온이라 blog 로 좁혀준다
+const allPosts = (await getBlogCollection()) as CollectionEntry<'blog'>[]
+const allPostsByDate = sortMDByDate(allPosts) as CollectionEntry<'blog'>[]
+const allPostsByYear = groupCollectionsByYear(allPostsByDate)
+
+const meta = {
+  description: 'A list of all the years of creating my posts',
+  title: 'Archives'
+}
+
+// 05-01 형태의 짧은 날짜
+const shortDate = (date?: Date) => {
+  if (!date) return ''
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${month}-${day}`
+}
+---
+
+<PageLayout {meta}>
+  <Button title='Back' href='/blog' variant='back' />
+
+  <main class='mt-6 lg:mt-10'>
+    <div id='content-header' class='animate'>
+      <h1 class='mb-6 text-3xl font-medium'>Archives</h1>
+    </div>
+
+    {allPosts.length === 0 && <p>No posts yet.</p>}
+
+    <section id='content' class='animate' aria-label='Blog post list'>
+      {
+        allPostsByYear.map(([year, posts]) => (
+          <div class='timeline-group'>
+            {/* 연도 헤더 */}
+            <div class='timeline-row timeline-year'>
+              <div class='timeline-date timeline-year-label'>{year}</div>
+              <div class='timeline-rail timeline-rail-start'>
+                <span class='timeline-dot timeline-dot-year' />
+              </div>
+              <div class='timeline-count'>
+                {posts.length} post{posts.length > 1 && 's'}
+              </div>
+            </div>
+
+            {/* 글 목록 */}
+            {posts.map((p, index) => (
+              <a
+                href={`/blog/${p.id}`}
+                class='timeline-row timeline-post'
+                data-astro-prefetch
+                aria-label={p.data.title}
+              >
+                <div class='timeline-date'>
+                  {shortDate(p.data.updatedDate ?? p.data.publishDate)}
+                </div>
+                <div
+                  class:list={[
+                    'timeline-rail',
+                    index === posts.length - 1 && 'timeline-rail-end'
+                  ]}
+                >
+                  <span class='timeline-dot' />
+                </div>
+                <div class='timeline-title'>
+                  {p.data.draft && <span class='timeline-draft'>(Draft) </span>}
+                  {p.data.title}
+                </div>
+                {p.data.tags.length > 0 && (
+                  <div class='timeline-tags'>
+                    {p.data.tags.slice(0, 3).map((tag: string) => (
+                      <span class='timeline-tag'>#{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </a>
+            ))}
+          </div>
+        ))
+      }
+    </section>
+  </main>
+</PageLayout>
+
+<style>
+  .timeline-group {
+    margin-top: 2.5rem;
+  }
+  .timeline-group:first-child {
+    margin-top: 0.5rem;
+  }
+
+  /* 한 줄: 날짜 | 레일(선+점) | 제목 | 태그 */
+  .timeline-row {
+    display: flex;
+    align-items: stretch;
+    column-gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .timeline-date {
+    flex: none;
+    width: 4.5rem;
+    padding: 0.5rem 0;
+    text-align: right;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    color: hsl(var(--muted-foreground));
+    font-variant-numeric: tabular-nums;
+  }
+
+  .timeline-year-label {
+    padding: 0.25rem 0 0.75rem;
+    font-size: 1.75rem;
+    line-height: 2rem;
+    font-weight: 700;
+    color: hsl(var(--foreground));
+  }
+
+  /* 세로 레일 — 선과 점이 함께 있는 열 */
+  .timeline-rail {
+    position: relative;
+    flex: none;
+    width: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .timeline-rail::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    border-left: 1px dashed hsl(var(--border));
+  }
+  /* 연도 행: 점 아래쪽으로만 선을 그린다 */
+  .timeline-rail-start::before {
+    top: 50%;
+  }
+  /* 마지막 글: 점 위쪽까지만 선을 그린다 */
+  .timeline-rail-end::before {
+    bottom: 50%;
+  }
+
+  .timeline-dot {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 9999px;
+    background-color: hsl(var(--muted-foreground));
+    transition: background-color 0.2s ease-in-out;
+  }
+  .timeline-dot-year {
+    width: 0.75rem;
+    height: 0.75rem;
+    background-color: hsl(var(--background));
+    border: 2px solid hsl(var(--primary));
+  }
+
+  .timeline-count {
+    padding: 0.25rem 0 0.75rem;
+    align-self: center;
+    font-size: 0.875rem;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .timeline-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0.5rem 0;
+    font-weight: 500;
+    line-height: 1.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.2s ease-in-out;
+  }
+  .timeline-draft {
+    color: #ef4444;
+  }
+
+  .timeline-tags {
+    flex: none;
+    max-width: 40%;
+    padding: 0.5rem 0;
+    display: flex;
+    column-gap: 0.5rem;
+    overflow: hidden;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    color: hsl(var(--muted-foreground));
+    white-space: nowrap;
+  }
+  .timeline-tag {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* hover */
+  .timeline-post:hover .timeline-title {
+    color: hsl(var(--primary));
+  }
+  .timeline-post:hover .timeline-dot {
+    background-color: hsl(var(--primary));
+  }
+
+  /* 모바일에서는 태그를 감춘다 */
+  @media (max-width: 640px) {
+    .timeline-tags {
+      display: none;
+    }
+    .timeline-date {
+      width: 3.75rem;
+    }
+  }
+</style>
