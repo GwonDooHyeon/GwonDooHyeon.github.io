@@ -1,0 +1,69 @@
+---
+// giscus — GitHub Discussions 를 댓글로 쓴다.
+// 설정값은 https://giscus.app 에서 발급받은 것과 동일하다.
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+
+const giscusConfig = {
+  repo: 'GwonDooHyeon/GwonDooHyeon.github.io',
+  repoId: 'R_kgDOTygr8w',
+  category: 'Announcements',
+  categoryId: 'DIC_kwDOTygr884DC894',
+  // 글 경로(pathname)를 Discussion 제목으로 매핑한다
+  mapping: 'pathname',
+  reactionsEnabled: '1',
+  emitMetadata: '0',
+  inputPosition: 'top',
+  lang: 'ko'
+}
+---
+
+<section class={className} aria-label='댓글'>
+  <script
+    src='https://giscus.app/client.js'
+    data-repo={giscusConfig.repo}
+    data-repo-id={giscusConfig.repoId}
+    data-category={giscusConfig.category}
+    data-category-id={giscusConfig.categoryId}
+    data-mapping={giscusConfig.mapping}
+    data-strict='0'
+    data-reactions-enabled={giscusConfig.reactionsEnabled}
+    data-emit-metadata={giscusConfig.emitMetadata}
+    data-input-position={giscusConfig.inputPosition}
+    data-theme='preferred_color_scheme'
+    data-lang={giscusConfig.lang}
+    data-loading='lazy'
+    crossorigin='anonymous'
+    async></script>
+</section>
+
+<script>
+  // 사이트의 라이트/다크 토글에 giscus iframe 테마를 맞춘다
+  const applyGiscusTheme = () => {
+    const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
+    if (!iframe?.contentWindow) return
+    const isDark = document.documentElement.classList.contains('dark')
+    iframe.contentWindow.postMessage(
+      { giscus: { setConfig: { theme: isDark ? 'dark' : 'light' } } },
+      'https://giscus.app'
+    )
+  }
+
+  // giscus iframe 이 준비된 뒤 한 번 맞춰준다
+  window.addEventListener('message', (event) => {
+    if (event.origin !== 'https://giscus.app') return
+    if (typeof event.data === 'object' && event.data?.giscus) applyGiscusTheme()
+  })
+
+  // 테마 토글 감지
+  new MutationObserver(applyGiscusTheme).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  })
+
+  // Astro 페이지 전환 시 재적용
+  document.addEventListener('astro:after-swap', applyGiscusTheme)
+</script>
