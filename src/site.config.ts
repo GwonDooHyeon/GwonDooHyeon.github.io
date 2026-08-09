@@ -83,10 +83,8 @@ export const theme: ThemeUserConfig = {
       properties: { style: 'user-select:none' }
     },
     /** Blog page size for pagination (optional) */
-    blogPageSize: 8,
-    /** Share buttons to show */
-    // Currently support weibo, x, bluesky
-    share: ['weibo', 'x', 'bluesky']
+    blogPageSize: 8
+    // 공유 버튼(share)은 글 하단 Copyright 카드에서만 쓰였고, 그 카드를 제거해 함께 뺐다
     /** Enable image captions (default false) */
     // imageCaption: true
   }
