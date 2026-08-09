@@ -13,7 +13,8 @@
     "pure": "astro-pure",
     "format": "prettier --write  '**/*.{js,jsx,ts,tsx,md,mdx,astro}'",
     "lint": "eslint --fix 'src/**/*.{js,ts,jsx,tsx,astro}'",
-    "clean": "rm -rf .astro dist"
+    "clean": "rm -rf .astro dist",
+    "thumbnail": "node preset/scripts/thumbnail.mjs"
   },
   "dependencies": {
     "@astrojs/check": "0.9.9",
