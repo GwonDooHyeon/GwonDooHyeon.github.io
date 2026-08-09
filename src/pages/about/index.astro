@@ -1,29 +1,167 @@
 ---
 import PageLayout from '@/layouts/CommonPage.astro'
+import SkillSection from '@/components/about/SkillSection.astro'
+import ToolSection from '@/components/about/ToolSection.astro'
 
 const headings = [
   { depth: 2, slug: 'what-i-do', text: '하는 일' },
-  { depth: 2, slug: 'interests', text: '관심사' },
+  { depth: 2, slug: 'stack', text: '기술 스택' },
+  { depth: 2, slug: 'career', text: '경력' },
+  { depth: 2, slug: 'interests', text: '요즘 파고드는 것' },
   { depth: 2, slug: 'contact', text: '연락' }
+]
+
+// 아이콘은 simple-icons 에서 브랜드 색을 입혀 뽑아 둔 것 (src/assets/tools)
+// 다크 배경에서 묻히는 것만 -dark.svg 를 따로 둔다
+const languageTools = [
+  {
+    name: 'Python',
+    href: 'https://www.python.org',
+    icon: import('@/assets/tools/python.svg?raw')
+  },
+  {
+    name: 'TypeScript',
+    href: 'https://www.typescriptlang.org',
+    icon: import('@/assets/tools/typescript.svg?raw')
+  }
+]
+
+const platformTools = [
+  {
+    name: 'FastAPI',
+    href: 'https://fastapi.tiangolo.com',
+    icon: import('@/assets/tools/fastapi.svg?raw')
+  },
+  {
+    name: 'PostgreSQL',
+    href: 'https://www.postgresql.org',
+    icon: import('@/assets/tools/postgresql.svg?raw'),
+    darkIcon: import('@/assets/tools/postgresql-dark.svg?raw')
+  },
+  {
+    name: 'AWS',
+    href: 'https://aws.amazon.com',
+    icon: import('@/assets/tools/aws.svg?raw'),
+    darkIcon: import('@/assets/tools/aws-dark.svg?raw')
+  }
+]
+
+const frontendTools = [
+  {
+    name: 'React',
+    href: 'https://react.dev',
+    icon: import('@/assets/tools/react.svg?raw'),
+    darkIcon: import('@/assets/tools/react-dark.svg?raw')
+  },
+  {
+    name: 'Next.js',
+    href: 'https://nextjs.org',
+    icon: import('@/assets/tools/nextdotjs.svg?raw'),
+    darkIcon: import('@/assets/tools/nextdotjs-dark.svg?raw')
+  },
+  {
+    name: 'Tailwind CSS',
+    href: 'https://tailwindcss.com',
+    icon: import('@/assets/tools/tailwindcss.svg?raw')
+  }
+]
+
+const pastSkills = [
+  {
+    title: 'Backend',
+    skills: ['Java', 'Spring Boot', 'JPA', 'MySQL']
+  },
+  {
+    title: 'AI / Data',
+    skills: ['LangChain', 'LangGraph', 'OpenTelemetry']
+  },
+  {
+    title: 'Frontend',
+    skills: ['Flutter']
+  }
 ]
 ---
 
 <PageLayout title='About' {headings}>
-  <p>백엔드와 AI 에이전트를 만듭니다.</p>
+  <p>
+    개발을 문제 해결의 도구로 생각합니다. 반복적인 업무와 복잡한 과정을 AI 로 자동화하는 데 관심이
+    많습니다.
+  </p>
 
   <h2 id='what-i-do'>하는 일</h2>
-  <p>여기에 소개를 적으세요.</p>
+  <p>
+    AI Agent 를 만듭니다. 풀스택으로 서비스를 만들다가 생성형 AI 플랫폼과 RAG 를 거쳐, 지금은
+    에이전트 개발로 방향을 잡았습니다.
+  </p>
+  <p>
+    에이전트는 정해진 흐름을 따라가게 하기보다 스스로 판단하고 움직이도록 만들고 있습니다. 그래서
+    그래프로 워크플로를 그리는 프레임워크 대신 루프와 도구 호출을 직접 다룹니다.
+  </p>
 
-  <h2 id='interests'>관심사</h2>
+  <h2 id='stack'>기술 스택</h2>
+  <p class='text-muted-foreground'>지금 쓰는 것</p>
+  <div class='flex flex-col gap-y-4'>
+    <ToolSection title='Language' tools={languageTools} />
+    <ToolSection title='Backend / Infra' tools={platformTools} />
+    <ToolSection title='Frontend' tools={frontendTools} />
+  </div>
+
+  <p class='mt-6 text-muted-foreground'>전에 쓴 것</p>
+  {pastSkills.map((group) => <SkillSection {...group} />)}
+
+  <h2 id='career'>경력</h2>
   <ul>
-    <li>LLM 에이전트</li>
-    <li>백엔드 아키텍처</li>
+    <li>
+      <strong>에이엑스</strong> (2026.07 ~ ) — AI Agent 개발자 / 선임<br />
+      사내 AI Agent 관리 플랫폼 개발
+    </li>
+    <li>
+      <strong>디딤</strong> (2024.10 ~ 2026.07) — 풀스택 / AI<br />
+      농촌진흥청 RAG 고도화, 신한은행 생성형 AI 플랫폼, LLMOps 구축<br />
+      <small class='text-muted-foreground'>
+        <a href='https://github.com/comet-ml/opik/pull/2185' target='_blank'>Opik PR #2185</a>
+        <span aria-hidden='true'> · </span>
+        <a href='https://www.palnews.co.kr/news/articleView.html?idxno=236960' target='_blank'>
+          농촌진흥청 보도
+        </a>
+        <span aria-hidden='true'> · </span>
+        <a href='https://www.aitimes.kr/news/articleView.html?idxno=36328' target='_blank'>
+          신한은행 보도
+        </a>
+      </small>
+    </li>
+    <li>
+      <strong>지투이</strong> (2023.05 ~ 2024.09) — 풀스택<br />
+      AI 응급의료 모니터링 시스템<br />
+      <small class='text-muted-foreground'>
+        <a href='https://www.yna.co.kr/view/MYH20240911004500641' target='_blank'>연합뉴스 보도</a>
+      </small>
+    </li>
   </ul>
+
+  <h2 id='interests'>요즘 파고드는 것</h2>
+  <p>에이전트를 직접 만들다 보면 결국 이런 문제들과 마주칩니다.</p>
+  <ul>
+    <li><strong>실행 루프</strong> — 계획·실행·관찰을 어디서 끊고, 언제 멈출지</li>
+    <li><strong>실행 상태</strong> — 중간에 끊긴 작업을 다시 이어가려면 무엇을 남겨야 하는지</li>
+    <li><strong>메모리</strong> — 무엇을 남기고 무엇을 버릴지, 다음 턴에 어떻게 꺼낼지</li>
+    <li><strong>도구 관리</strong> — 등록과 권한, 실패했을 때의 복구</li>
+    <li><strong>안전한 실행</strong> — 에이전트가 만든 코드를 어디까지 허용하고 어디에 가둘지</li>
+    <li><strong>모델 추상화</strong> — 특정 벤더에 묶이지 않게 경계를 어디에 둘지</li>
+    <li><strong>평가와 관측</strong> — 스스로 움직이는 걸 어떻게 검증할지</li>
+  </ul>
+  <p>
+    그 밖에 RAG 의 검색 품질과 데이터 정합성, 분산 트레이싱과 배포 자동화도 계속 들여다보고
+    있습니다.
+  </p>
 
   <h2 id='contact'>연락</h2>
   <ul>
     <li>
       GitHub — <a href='https://github.com/GwonDooHyeon' target='_blank'>GwonDooHyeon</a>
+    </li>
+    <li>
+      Email — <a href='mailto:secure3141@gmail.com'>secure3141@gmail.com</a>
     </li>
   </ul>
 </PageLayout>

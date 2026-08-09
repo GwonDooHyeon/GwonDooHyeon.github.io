@@ -10,7 +10,8 @@ interface Props {
   title: string
   tools: {
     name: string
-    description: string
+    /** 없으면 이름만 렌더한다 */
+    description?: string
     href: string
     icon: Promise<typeof import('*.svg?raw')> | ImageMetadata
     darkIcon?: Promise<typeof import('*.svg?raw')> | ImageMetadata
@@ -48,7 +49,7 @@ function isImageMetadata(obj: unknown): obj is ImageMetadata {
                 ) : (
                   <Svg
                     src={tool.icon}
-                    class='size-10 rounded-lg bg-card fill-foreground p-2 dark:hidden'
+                    class='size-10 rounded-lg bg-card p-2 dark:hidden'
                   />
                 )}
 
@@ -63,7 +64,7 @@ function isImageMetadata(obj: unknown): obj is ImageMetadata {
                 ) : (
                   <Svg
                     src={tool.darkIcon}
-                    class='size-10 rounded-lg bg-card fill-foreground p-2 hidden dark:block'
+                    class='size-10 rounded-lg bg-card p-2 hidden dark:block'
                   />
                 )}
               </>
@@ -74,13 +75,13 @@ function isImageMetadata(obj: unknown): obj is ImageMetadata {
                     <Image src={tool.icon} alt={tool.name} class='h-full w-full object-contain' />
                   </div>
                 ) : (
-                  <Svg src={tool.icon} class='size-10 rounded-lg bg-card fill-foreground p-2' />
+                  <Svg src={tool.icon} class='size-10 rounded-lg bg-card p-2' />
                 )}
               </>
             )}
             <div class='z-20 flex flex-col'>
               <div class='font-medium text-foreground'>{tool.name}</div>
-              <div class='font-normal'>{tool.description}</div>
+              {tool.description && <div class='font-normal'>{tool.description}</div>}
             </div>
           </div>
         </a>

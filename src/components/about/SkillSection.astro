@@ -1,0 +1,34 @@
+---
+type Props = {
+  title: string
+  skills: string[]
+  /** 강조하고 싶은 스킬. primary 색으로 칠한다 */
+  highlight?: string[]
+}
+
+const { title, skills, highlight = [] } = Astro.props
+---
+
+<div class='not-prose mb-4 flex flex-col gap-y-2 sm:flex-row sm:gap-x-5 sm:gap-y-0'>
+  <h3
+    class='shrink-0 border-s-3 border-primary ps-2 text-sm font-medium text-foreground sm:w-32 sm:text-base'
+  >
+    {title}
+  </h3>
+  <ul class='flex flex-1 flex-row flex-wrap gap-2'>
+    {
+      skills.map((skill) => (
+        <li
+          class:list={[
+            'rounded-xl border px-2.5 py-1 text-sm transition-colors',
+            highlight.includes(skill)
+              ? 'border-primary/40 bg-primary/10 text-primary'
+              : 'border-border bg-muted text-muted-foreground hover:text-foreground'
+          ]}
+        >
+          {skill}
+        </li>
+      ))
+    }
+  </ul>
+</div>
