@@ -14,7 +14,8 @@ const allPostsByDate = sortMDByDate(allPosts) as CollectionEntry<'blog'>[]
 const recentPosts = allPostsByDate.slice(0, MAX_POSTS)
 ---
 
-<PageLayout meta={{ title: 'Home' }}>
+{/* 홈은 링크 미리보기에 'Home' 대신 사이트 이름이 나가야 한다 */}
+<PageLayout meta={{ title: config.title }}>
   <main class='w-full'>
     {/* 배너 */}
     <section id='content-header' class='animate'>
