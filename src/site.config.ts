@@ -11,7 +11,9 @@ export const theme: ThemeUserConfig = {
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
   favicon: '/favicon/favicon.ico',
   /** The default social card image for your site which should be a path to an image in the `public/` directory. */
-  socialCard: '/images/social-card.png',
+  // 이미지를 바꿀 때는 파일 이름도 함께 바꿔야 한다.
+  // URL 이 같으면 카카오톡·슬랙 등이 캐시된 옛 이미지를 계속 보여준다.
+  socialCard: '/images/og-card.png',
   /** Specify the default language for this site. */
   locale: {
     lang: 'ko-KR',
