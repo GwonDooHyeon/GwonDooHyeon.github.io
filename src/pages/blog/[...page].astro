@@ -29,20 +29,20 @@ interface Props {
 const { page, uniqueTags, collectionsCount } = Astro.props
 
 const meta = {
-  description: 'Some posts or archives of my blog',
+  description: '그동안 쓴 글 목록',
   title: 'Blog'
 }
 
 const paginationProps = {
   ...(page.url.prev && {
     prevUrl: {
-      text: `← Previous Posts`,
+      text: `← 이전 글`,
       url: page.url.prev
     }
   }),
   ...(page.url.next && {
     nextUrl: {
-      text: `Next Posts →`,
+      text: `다음 글 →`,
       url: page.url.next
     }
   })
@@ -50,24 +50,24 @@ const paginationProps = {
 ---
 
 <PageLayout {meta}>
-  <Button title='Back' href='/' variant='back' />
+  <Button title='뒤로' href='/' variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>Blog</h1>
     </div>
     {
       page.data.length === 0 ? (
-        <p>No posts yet.</p>
+        <p>아직 글이 없습니다.</p>
       ) : (
         <div class='grid gap-y-16 sm:grid-cols-[3fr_1fr] sm:gap-x-8'>
-          <section aria-label='Blog posts list' class='animate' id='content'>
+          <section aria-label='글 목록' class='animate' id='content'>
             {/* header */}
             <div class='mb-3 flex flex-col justify-between text-sm sm:mb-5 sm:flex-row'>
               <span class='text-muted-foreground'>
-                Page {page.currentPage} - Showing {page.data.length} of {collectionsCount} posts
+                {page.currentPage} 페이지 · 전체 {collectionsCount}편 중 {page.data.length}편
               </span>
-              <a aria-label='View all blog by years' href='/archives' data-astro-prefetch>
-                View all posts by years →
+              <a aria-label='연도별로 모아 보기' href='/archives' data-astro-prefetch>
+                연도별로 보기 →
               </a>
             </div>
             {/* posts */}
@@ -97,8 +97,8 @@ const paginationProps = {
                 }
               </ul>
               <span class='mt-4 block sm:text-end'>
-                <a aria-label='View all blog categories' href='/tags' data-astro-prefetch>
-                  View all →
+                <a aria-label='전체 태그 보기' href='/tags' data-astro-prefetch>
+                  전체 보기 →
                 </a>
               </span>
             </aside>

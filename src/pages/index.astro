@@ -30,7 +30,7 @@ const recentPosts = allPostsByDate.slice(0, MAX_POSTS)
     <div id='content' class='animate mt-8 flex flex-col gap-6 md:flex-row-reverse md:items-start'>
       <HomeSidebar posts={allPostsByDate} class='md:sticky md:top-6 md:w-64 md:shrink-0' />
 
-      <section class='flex min-w-0 flex-1 flex-col gap-y-4' aria-label='Recent posts'>
+      <section class='flex min-w-0 flex-1 flex-col gap-y-4' aria-label='최근 글'>
         {allPosts.length === 0 && <p class='text-muted-foreground'>아직 글이 없습니다.</p>}
 
         <ul class='flex flex-col gap-y-3'>
@@ -39,7 +39,7 @@ const recentPosts = allPostsByDate.slice(0, MAX_POSTS)
 
         {
           allPostsByDate.length > MAX_POSTS && (
-            <Button title='More posts' class='w-fit self-end' href='/blog' variant='ahead' />
+            <Button title='글 더 보기' class='w-fit self-end' href='/blog' variant='ahead' />
           )
         }
       </section>
