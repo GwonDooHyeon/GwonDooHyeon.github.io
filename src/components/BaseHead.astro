@@ -9,7 +9,9 @@ type Props = SiteMeta
 
 const { articleDate, description, ogImage, title } = Astro.props
 
-const siteTitle = `${title} ${config.titleDelimiter} ${config.title}`
+// 브라우저 탭에는 사이트 이름만 보이게 한다.
+// 페이지 이름은 og:title / twitter:title 로 따로 나가므로 공유 시에는 그대로 구분된다.
+const siteTitle = config.title
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url).href
 ---
