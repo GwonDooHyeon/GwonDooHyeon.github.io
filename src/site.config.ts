@@ -62,8 +62,11 @@ export const theme: ThemeUserConfig = {
     year: `© ${new Date().getFullYear()}`,
     // year: `© 2019 - ${new Date().getFullYear()}`,
     links: [],
-    /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
-    credits: true,
+    /**
+     * 푸터의 “Astro & Pure theme powered” 크레딧.
+     * 테마 라이선스(Apache 2.0)는 LICENSE 사본 유지만 요구하므로 표시 의무는 없다.
+     */
+    credits: false,
     /** Optional details about the social media accounts for this site. */
     social: [
       { icon: 'github', label: 'GitHub', href: 'https://github.com/GwonDooHyeon' },
