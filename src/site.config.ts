@@ -1,4 +1,4 @@
-import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
+import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
 
 export const theme: ThemeUserConfig = {
   // [Basic]
@@ -47,15 +47,12 @@ export const theme: ThemeUserConfig = {
 
   /** Configure the header of your site. */
   header: {
-    // 아직 채우지 않은 Docs / Projects / Links 는 메뉴에서 뺐다.
-    // 콘텐츠가 생기면 아래 주석을 풀면 된다.
     menu: [
       { title: 'Blog', link: '/blog' },
+      { title: 'Projects', link: '/projects' },
+      { title: 'Links', link: '/links' },
       { title: 'Archives', link: '/archives' },
       { title: 'About', link: '/about' }
-      // { title: 'Docs', link: '/docs' },
-      // { title: 'Projects', link: '/projects' },
-      // { title: 'Links', link: '/links' }
     ]
   },
 
@@ -64,14 +61,7 @@ export const theme: ThemeUserConfig = {
     // Year format
     year: `© ${new Date().getFullYear()}`,
     // year: `© 2019 - ${new Date().getFullYear()}`,
-    links: [
-      // Privacy Policy link
-      {
-        title: 'Site Policy',
-        link: '/terms',
-        pos: 2 // position set to 2 will be appended to copyright line
-      }
-    ],
+    links: [],
     /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
     credits: true,
     /** Optional details about the social media accounts for this site. */
@@ -103,14 +93,8 @@ export const integ: IntegrationUserConfig = {
   // [Links]
   // https://astro-pure.js.org/docs/integrations/links
   links: {
-    // Friend logbook
-    logbook: [
-      { date: '2025-03-16', content: 'Is there a leakage?' },
-      { date: '2025-03-16', content: 'A leakage of what?' },
-      { date: '2025-03-16', content: 'I have a full seat of water, like, full of water!' },
-      { date: '2025-03-16', content: 'Must be the water.' },
-      { date: '2025-03-16', content: "Let's add that to the words of wisdom." }
-    ],
+    // Friend logbook — 링크를 주고받은 기록을 남기는 곳
+    logbook: [{ date: '2026-08-09', content: '블로그를 열었다.' }],
     // Yourself link info
     applyTip: [
       { name: 'Name', val: theme.title },
@@ -159,50 +143,11 @@ export const integ: IntegrationUserConfig = {
     }
   },
   // Comment system
-  // 기본값은 테마 제작자의 Waline 서버였다. 남의 서버에 댓글이 쌓이므로 꺼둔다.
-  // giscus 로 교체하거나 자체 Waline 서버를 띄운 뒤 다시 켤 것.
+  // 댓글은 giscus 를 쓴다 (src/components/Giscus.astro).
+  // waline 은 astro-pure 스키마가 필수로 요구해서 비활성 상태로만 남겨둔다.
   waline: {
-    enable: false,
-    // Server service link
-    server: 'https://astro-theme-pure-waline.arthals.ink/',
-    // Show meta info for comments
-    showMeta: false,
-    // Refer https://waline.js.org/en/guide/features/emoji.html
-    emoji: ['bmoji', 'weibo'],
-    // Refer https://waline.js.org/en/reference/client/props.html
-    additionalConfigs: {
-      // search: false,
-      pageview: true,
-      comment: true,
-      locale: {
-        reaction0: 'Like',
-        placeholder: 'Welcome to comment. (Email to receive replies. Login is unnecessary)'
-      },
-      imageUploader: false
-    }
+    enable: false
   }
-}
-
-export const terms: CardListData = {
-  title: 'Terms content',
-  list: [
-    {
-      title: 'Privacy Policy',
-      link: '/terms/privacy-policy'
-    },
-    {
-      title: 'Terms and Conditions',
-      link: '/terms/terms-and-conditions'
-    },
-    {
-      title: 'Copyright',
-      link: '/terms/copyright'
-    },
-    {
-      title: 'Disclaimer',
-      link: '/terms/disclaimer'
-    }
-  ]
 }
 
 const config = { ...theme, integ } as Config
