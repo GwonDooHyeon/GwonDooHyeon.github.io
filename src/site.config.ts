@@ -49,8 +49,6 @@ export const theme: ThemeUserConfig = {
   header: {
     menu: [
       { title: 'Blog', link: '/blog' },
-      { title: 'Projects', link: '/projects' },
-      { title: 'Links', link: '/links' },
       { title: 'Archives', link: '/archives' },
       { title: 'About', link: '/about' }
     ]
@@ -90,21 +88,6 @@ export const theme: ThemeUserConfig = {
 }
 
 export const integ: IntegrationUserConfig = {
-  // [Links]
-  // https://astro-pure.js.org/docs/integrations/links
-  links: {
-    // Friend logbook — 링크를 주고받은 기록을 남기는 곳
-    logbook: [{ date: '2026-08-09', content: '블로그를 열었다.' }],
-    // Yourself link info
-    applyTip: [
-      { name: 'Name', val: theme.title },
-      { name: 'Desc', val: theme.description || 'Null' },
-      { name: 'Link', val: 'https://GwonDooHyeon.github.io/' },
-      { name: 'Avatar', val: 'https://GwonDooHyeon.github.io/favicon/favicon.ico' }
-    ],
-    // Cache avatars in `public/avatars/` to improve user experience.
-    cacheAvatar: false
-  },
   // [Search]
   pagefind: true,
   // Add a random quote to the footer (default on homepage footer)
