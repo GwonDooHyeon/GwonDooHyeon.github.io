@@ -51,6 +51,39 @@ draft: false
 
 시리즈 연재는 태그 하나로 묶는다 (`/tags/<태그>` 가 시리즈 목록 역할을 한다).
 
+### 컴포넌트를 쓰려면 `.mdx`
+
+`.md` 에서는 컴포넌트를 못 쓴다. 확장자를 `.mdx` 로 바꾸면 `Aside` · `Steps` · `Collapse` ·
+`Tabs` · `GithubCard` 같은 테마 컴포넌트를 쓸 수 있다.
+
+```jsx
+import { Collapse, Steps } from 'astro-pure/user'
+import { GithubCard } from 'astro-pure/advanced'
+```
+
+**컴포넌트는 정보를 더할 때만 쓴다.** 문장을 꾸미려고 쓰면 글이 산만해지고 티가 난다.
+
+| 쓸 만한 경우 | 쓰면 안 되는 경우 |
+| --- | --- |
+| `Steps` — 순서라는 정보를 더한다 | 핵심 주장을 `Aside` 상자에 넣기 |
+| `GithubCard` — 별·라이선스를 보여준다 | 한 문장 강조하려고 `Aside` 쓰기 |
+| `Collapse` — 곁가지를 접어 흐름을 지킨다 | 본문 문단을 상자로 감싸기 |
+
+### 썸네일 (heroImage)
+
+```shell
+npm run thumbnail -- "<주제어>" <slug>
+```
+
+`src/content/blog/<slug>/thumbnail.png` 가 만들어진다. 주제어는 **색을 정하는 시드로만** 쓰이고
+이미지에 글자로 나오지 않는다. 같은 주제어면 항상 같은 색이라, 주제별로 색이 묶인다.
+
+> **이미지 안에 글자를 넣지 말 것.** 이 테마는 heroImage 를 목록 카드와 글 상단의 배경 질감으로
+> 깔고 그 위에 제목·설명을 얹는다. 이미지에 글자가 있으면 어디에 두든 본문 텍스트와 겹친다.
+
+생성기는 `preset/scripts/thumbnail.mjs` 이고 sharp 의 SVG 렌더링만 쓴다. 색·크기는 파일 상단 상수를
+고치면 된다.
+
 ## 페이지 추가
 
 `src/pages/` 아래 파일을 놓으면 그 경로가 URL 이 된다. `CommonPage` 로 감싸면 기존 페이지들과 같은
@@ -85,6 +118,11 @@ astro-pure 스키마가 필수로 요구해서 남겨둔 것이니 지우지 말
 
 - `src/pages/` 에 컴포넌트 두기 → URL 로 새어 나간다
 - 테마 원본(cworld1) 의 링크·이미지·후원 정보를 되살리기 → 전부 걷어낸 상태다
+- heroImage 안에 글자 넣기 → 본문 제목과 겹친다 (위 "썸네일" 참고)
+- 회사 내부 아키텍처를 글에 그대로 옮기기 → 공개 블로그다. 일반화해서 쓴다
+
+dev 서버는 내용 수정만 따라온다. `site.config.ts` 를 고치거나 파일 이름·위치를 바꾸면 재시작해야
+한다.
 
 ## Astro 문서
 
